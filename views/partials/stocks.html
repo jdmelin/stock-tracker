@@ -1,0 +1,9 @@
+<h1>Stocks</h1>
+<div>
+  ${stocks.map((stock) => `
+  <a href="stocks/${stock.id}">
+    <h2>${stock.name}</h2>
+    <h3>${stock.category}</h3>
+  </a>
+  `).join('')}
+</div>
