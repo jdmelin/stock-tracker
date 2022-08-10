@@ -1,17 +1,7 @@
+const bcrypt = require('bcrypt');
 const { User, Stock } = require('../models');
 
 module.exports = {
-  async create(req, res) {
-    const { firstName, lastName, email } = req.body;
-    const newUser = await User.create({
-      firstName,
-      lastName,
-      email,
-    });
-
-    res.json(newUser);
-  },
-
   async deleteUser(req, res) {
     const { id } = req.params;
 
@@ -31,7 +21,7 @@ module.exports = {
 
   async getOne(req, res) {
     try {
-      const oneUser = await User.findByPk(req.params.id);
+      const oneUser = await User.findByPk(req.params.id, { include: Stock });
 
       if (oneUser === null) {
         res.status(404).json({
@@ -43,6 +33,34 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  async logIn(req, res) {
+    const { email, password } = req.body;
+
+    try {
+      const user = await User.findOne({
+        where: { email },
+      });
+
+      bcrypt.compare(password, user.password, (err, match) => {
+        console.log(match);
+        if (match) {
+          res.render('template', {
+            partials: {
+              partial: '/partials/home',
+            },
+          });
+        } else {
+        }
+      });
+    } catch {}
+  },
+
+  async register(req, res) {
+    const newUser = await User.create(req.body);
+
+    res.json(newUser);
   },
 
   async update(req, res) {
