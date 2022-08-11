@@ -31,7 +31,7 @@ module.exports = {
 
       res.json(oneUser);
     } catch (error) {
-      console.log(error);
+      res.json(error);
     }
   },
 
@@ -44,17 +44,15 @@ module.exports = {
       });
 
       bcrypt.compare(password, user.password, (err, match) => {
-        console.log(match);
         if (match) {
-          res.render('template', {
-            partials: {
-              partial: '/partials/home',
-            },
-          });
+          req.session.user = user;
+          res.json('success');
         } else {
         }
       });
-    } catch {}
+    } catch {
+      res.json('failure');
+    }
   },
 
   async register(req, res) {

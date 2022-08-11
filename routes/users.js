@@ -9,8 +9,4 @@ router
   .put(userController.update)
   .delete(userController.deleteUser);
 
-router.route('/users/login').post(userController.logIn);
-
-router.route('/users/register').post(userController.register);
-
 module.exports = router;
