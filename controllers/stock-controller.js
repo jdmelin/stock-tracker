@@ -28,6 +28,7 @@ module.exports = {
 
     res.render('template', {
       locals: {
+        loggedIn: req.session.user,
         stocks,
       },
       partials: {
@@ -37,24 +38,22 @@ module.exports = {
   },
 
   async getAllByUserId(req, res) {
-    const userId = req.session.user.id;
-    const stocks = await Stock.findAll({
-      attributes: ['name', 'category'],
-      include: [
-        {
-          model: User,
+    const { id } = req.session.user;
+    const user = await User.findByPk(id, {
+      include: {
+        model: Stock,
+        as: 'stocks',
+        attributes: ['id', 'name', 'category'],
+        through: {
           attributes: [],
-          through: {
-            where: {
-              userId,
-            },
-          },
         },
-      ],
+      },
     });
+    const stocks = user.stocks.map((stock) => stock.get({ plain: true }));
 
     res.render('template', {
       locals: {
+        loggedIn: req.session.user,
         stocks,
       },
       partials: {

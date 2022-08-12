@@ -3,6 +3,9 @@ const userController = require('../controllers/user-controller');
 
 router.get('/login', (req, res) => {
   res.render('template', {
+    locals: {
+      loggedIn: false,
+    },
     partials: {
       partial: '/partials/login',
     },
