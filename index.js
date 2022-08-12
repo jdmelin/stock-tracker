@@ -10,7 +10,12 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const app = express();
 const es6Renderer = require('express-es6-template-engine');
+const db = require('./models');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const store = new SequelizeStore({ db: db.sequelize });
 require('dotenv').config();
+
+store.sync();
 
 app.engine('html', es6Renderer);
 app.set('views', 'views');
@@ -22,6 +27,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store,
     cookie: {
       secure: false,
       maxAge: 2592000,

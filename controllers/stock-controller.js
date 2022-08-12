@@ -24,7 +24,7 @@ module.exports = {
   },
 
   async getAll(req, res) {
-    const stocks = await Stock.findAll({ include: User });
+    const stocks = await Stock.findAll();
 
     res.render('template', {
       locals: {
@@ -32,6 +32,33 @@ module.exports = {
       },
       partials: {
         partial: '/partials/stocks',
+      },
+    });
+  },
+
+  async getAllByUserId(req, res) {
+    const userId = req.session.user.id;
+    const stocks = await Stock.findAll({
+      attributes: ['name', 'category'],
+      include: [
+        {
+          model: User,
+          attributes: [],
+          through: {
+            where: {
+              userId,
+            },
+          },
+        },
+      ],
+    });
+
+    res.render('template', {
+      locals: {
+        stocks,
+      },
+      partials: {
+        partial: '/partials/my-stocks',
       },
     });
   },

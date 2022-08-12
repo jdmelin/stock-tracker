@@ -9,4 +9,6 @@ router
 
 router.route('/stocks/:userId/:stockId').post(stockController.createUserStock);
 
+router.route('/my-stocks').get(checkAuth, stockController.getAllByUserId);
+
 module.exports = router;

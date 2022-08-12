@@ -1,6 +1,6 @@
-const emailEl = document.querySelector('.email');
-const passwordEl = document.querySelector('.password');
-const submitEl = document.querySelector('.submit');
+const emailEl = document.querySelector('#email');
+const passwordEl = document.querySelector('#password');
+const submitEl = document.querySelector('button');
 
 submitEl.addEventListener('click', (event) => {
   event.preventDefault();
