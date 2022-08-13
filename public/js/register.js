@@ -26,8 +26,8 @@ submitEl.addEventListener('click', (event) => {
     body: JSON.stringify(payload),
   })
     .then((response) => response.json())
-    .then((response) => {
-      if (response === 'success') {
+    .then(({ message }) => {
+      if (message === 'success') {
         window.location.replace('/login');
       }
     });

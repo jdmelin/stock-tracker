@@ -5,18 +5,27 @@ module.exports = {
   async deleteUser(req, res) {
     const { id } = req.params;
 
-    const deletedUser = await User.destroy({
-      where: {
-        id,
-      },
-    });
+    try {
+      const deletedUser = await User.destroy({
+        where: {
+          id,
+        },
+      });
 
-    res.json(deletedUser);
+      res.json(deletedUser);
+    } catch {
+      // handle error
+    }
   },
 
   async getAll(req, res) {
-    const users = await User.findAll({ include: Stock });
-    res.json(users);
+    try {
+      const users = await User.findAll({ include: Stock });
+
+      res.json(users);
+    } catch {
+      // handle error
+    }
   },
 
   async getOne(req, res) {
@@ -46,30 +55,37 @@ module.exports = {
       bcrypt.compare(password, user.password, (err, match) => {
         if (match) {
           req.session.user = user;
-          res.json('success');
+          res.json({ message: 'success' });
         } else {
         }
       });
     } catch {
-      res.json('failure');
+      res.json({ message: 'failure' });
     }
   },
 
   async register(req, res) {
-    await User.create(req.body);
-
-    res.json('success');
+    try {
+      await User.create(req.body);
+      res.json({ message: 'success' });
+    } catch {
+      res.json({ message: 'failure' });
+    }
   },
 
   async update(req, res) {
     const { id } = req.params;
 
-    const updatedUser = await User.update(req.body, {
-      where: {
-        id,
-      },
-    });
+    try {
+      const updatedUser = await User.update(req.body, {
+        where: {
+          id,
+        },
+      });
 
-    res.json(updatedUser);
+      res.json(updatedUser);
+    } catch {
+      // handle error
+    }
   },
 };

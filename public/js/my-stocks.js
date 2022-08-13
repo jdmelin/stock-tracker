@@ -7,12 +7,12 @@ for (const button of buttons) {
     const { id } = button.dataset;
 
     fetch(`/stocks/${id}`, {
-      method: 'POST',
+      method: 'DELETE',
     })
       .then((response) => response.json())
       .then(({ message }) => {
         if (message === 'success') {
-          button.disabled = true;
+          button.closest('.card').remove();
         }
       });
   });

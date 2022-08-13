@@ -7,7 +7,10 @@ router
   .post(stockController.create)
   .get(stockController.getAll);
 
-router.route('/stocks/:stockId').post(stockController.createUserStock);
+router
+  .route('/stocks/:stockId')
+  .post(stockController.createUserStock)
+  .delete(stockController.removeUserStock);
 
 router.route('/my-stocks').get(checkAuth, stockController.getAllByUserId);
 

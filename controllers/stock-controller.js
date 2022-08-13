@@ -4,62 +4,98 @@ module.exports = {
   async create(req, res) {
     const { name, category } = req.body;
 
-    const newStock = await Stock.create({
-      name,
-      category,
-    });
+    try {
+      const newStock = await Stock.create({
+        name,
+        category,
+      });
 
-    res.json(newStock);
+      res.json(newStock);
+    } catch {
+      // handle error
+    }
   },
 
   async createUserStock(req, res) {
     const userId = req.session.user.id;
     const { stockId } = req.params;
 
-    const newUserStock = await UserStock.create({
-      userId,
-      stockId,
-    });
-
-    res.json(newUserStock);
+    try {
+      await UserStock.create({
+        userId,
+        stockId,
+      });
+      res.json({ message: 'success' });
+    } catch {
+      res.json({ message: 'failure' });
+    }
   },
 
   async getAll(req, res) {
-    const stocks = await Stock.findAll();
+    try {
+      const allStocks = await Stock.findAll({
+        attributes: ['id', 'name', 'category'],
+      });
+      const stocks = allStocks.map((stock) => stock.get({ plain: true }));
 
-    res.render('template', {
-      locals: {
-        loggedIn: req.session.user,
-        stocks,
-      },
-      partials: {
-        partial: '/partials/stocks',
-      },
-    });
+      res.render('template', {
+        locals: {
+          loggedIn: req.session.user,
+          stocks,
+        },
+        partials: {
+          partial: '/partials/stocks',
+        },
+      });
+    } catch {
+      // handle error
+    }
   },
 
   async getAllByUserId(req, res) {
     const { id } = req.session.user;
-    const user = await User.findByPk(id, {
-      include: {
-        model: Stock,
-        as: 'stocks',
-        attributes: ['id', 'name', 'category'],
-        through: {
-          attributes: [],
-        },
-      },
-    });
-    const stocks = user.stocks.map((stock) => stock.get({ plain: true }));
 
-    res.render('template', {
-      locals: {
-        loggedIn: req.session.user,
-        stocks,
-      },
-      partials: {
-        partial: '/partials/my-stocks',
-      },
-    });
+    try {
+      const user = await User.findByPk(id, {
+        include: {
+          model: Stock,
+          as: 'stocks',
+          attributes: ['id', 'name', 'category'],
+          through: {
+            attributes: [],
+          },
+        },
+      });
+      const stocks = user.stocks.map((stock) => stock.get({ plain: true }));
+
+      res.render('template', {
+        locals: {
+          loggedIn: req.session.user,
+          stocks,
+        },
+        partials: {
+          partial: '/partials/my-stocks',
+        },
+      });
+    } catch {
+      // handle error
+    }
+  },
+
+  async removeUserStock(req, res) {
+    const userId = req.session.user.id;
+    const { stockId } = req.params;
+
+    try {
+      await UserStock.destroy({
+        where: {
+          userId,
+          stockId,
+        },
+      });
+      res.json({ message: 'success' });
+    } catch {
+      res.json({ message: 'failure' });
+    }
   },
 };
