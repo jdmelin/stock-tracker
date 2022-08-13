@@ -1,4 +1,5 @@
 const { Stock, User, UserStock } = require('../models');
+const getStockPrice = require('../utils/getStockPrice');
 
 module.exports = {
   async create(req, res) {
@@ -36,7 +37,8 @@ module.exports = {
       const userId = req.session.user.id;
 
       const allStocks = await Stock.findAll({
-        attributes: ['id', 'name', 'category', 'price'],
+        attributes: ['id', 'name', 'category'],
+        order: [['name', 'asc']],
       });
       const userStocks = await UserStock.findAll({ where: { userId } });
 
@@ -50,11 +52,11 @@ module.exports = {
         return favs;
       }, []);
 
-      stocks.forEach((stock) => {
+      for (const stock of stocks) {
         const isFavorite = favorites.includes(stock.id);
-
         stock.favorite = isFavorite;
-      });
+        stock.price = await getStockPrice(stock.name);
+      }
 
       res.render('template', {
         locals: {
@@ -75,10 +77,11 @@ module.exports = {
 
     try {
       const user = await User.findByPk(id, {
+        order: [[{ model: Stock, as: 'stocks' }, 'name', 'asc']],
         include: {
           model: Stock,
           as: 'stocks',
-          attributes: ['id', 'name', 'category', 'price'],
+          attributes: ['id', 'name', 'category'],
           through: {
             attributes: [],
           },
@@ -86,6 +89,10 @@ module.exports = {
       });
 
       const stocks = user.stocks.map((stock) => stock.get({ plain: true }));
+
+      for (const stock of stocks) {
+        stock.price = await getStockPrice(stock.name);
+      }
 
       res.render('template', {
         locals: {

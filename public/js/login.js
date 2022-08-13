@@ -2,7 +2,26 @@ const emailEl = document.querySelector('#email');
 const passwordEl = document.querySelector('#password');
 const submitEl = document.querySelector('button');
 
-submitEl.addEventListener('click', (event) => {
+const handleLogin = async (payload) => {
+  try {
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    const { message } = await response.json();
+
+    if (message === 'success') {
+      window.location.replace('/');
+    }
+  } catch {
+    // handle error
+  }
+};
+
+submitEl.addEventListener('click', async (event) => {
   event.preventDefault();
 
   const email = emailEl.value;
@@ -12,17 +31,5 @@ submitEl.addEventListener('click', (event) => {
     password,
   };
 
-  fetch('/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => response.json())
-    .then(({ message }) => {
-      if (message === 'success') {
-        window.location.replace('/');
-      }
-    });
+  handleLogin(payload);
 });

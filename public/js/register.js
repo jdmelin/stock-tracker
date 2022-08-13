@@ -4,6 +4,25 @@ const emailEl = document.querySelector('#email');
 const passwordEl = document.querySelector('#password');
 const submitEl = document.querySelector('button');
 
+const handleRegister = async (payload) => {
+  try {
+    const response = await fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    const { message } = await response.json();
+
+    if (message === 'success') {
+      window.location.replace('/login');
+    }
+  } catch {
+    // handle error
+  }
+};
+
 submitEl.addEventListener('click', (event) => {
   event.preventDefault();
 
@@ -18,17 +37,5 @@ submitEl.addEventListener('click', (event) => {
     password,
   };
 
-  fetch('/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  })
-    .then((response) => response.json())
-    .then(({ message }) => {
-      if (message === 'success') {
-        window.location.replace('/login');
-      }
-    });
+  handleRegister(payload);
 });

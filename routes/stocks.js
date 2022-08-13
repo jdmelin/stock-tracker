@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const stockController = require('../controllers/stock-controller');
-const { checkAuth } = require('../middleware/auth');
+const { checkAuth } = require('../middlewares/auth');
 
 router
   .route('/stocks')
