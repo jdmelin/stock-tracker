@@ -33,10 +33,28 @@ module.exports = {
 
   async getAll(req, res) {
     try {
+      const userId = req.session.user.id;
+
       const allStocks = await Stock.findAll({
-        attributes: ['id', 'name', 'category'],
+        attributes: ['id', 'name', 'category', 'price'],
       });
+      const userStocks = await UserStock.findAll({ where: { userId } });
+
       const stocks = allStocks.map((stock) => stock.get({ plain: true }));
+
+      const favorites = userStocks.reduce((favs, userStock) => {
+        if (userStock.userId === userId) {
+          favs.push(userStock.stockId);
+        }
+
+        return favs;
+      }, []);
+
+      stocks.forEach((stock) => {
+        const isFavorite = favorites.includes(stock.id);
+
+        stock.favorite = isFavorite;
+      });
 
       res.render('template', {
         locals: {
@@ -60,12 +78,13 @@ module.exports = {
         include: {
           model: Stock,
           as: 'stocks',
-          attributes: ['id', 'name', 'category'],
+          attributes: ['id', 'name', 'category', 'price'],
           through: {
             attributes: [],
           },
         },
       });
+
       const stocks = user.stocks.map((stock) => stock.get({ plain: true }));
 
       res.render('template', {

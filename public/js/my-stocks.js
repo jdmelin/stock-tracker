@@ -12,7 +12,7 @@ for (const button of buttons) {
       .then((response) => response.json())
       .then(({ message }) => {
         if (message === 'success') {
-          button.closest('.card').remove();
+          button.closest('.stock').remove();
         }
       });
   });
