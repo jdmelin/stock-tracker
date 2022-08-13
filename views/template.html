@@ -15,8 +15,12 @@
   <body>
     <nav class="navbar navbar-light bg-light p-2 justify-content-between">
       <a class="navbar-brand" href="/">Stock Tracker</a>
-      ${loggedIn ? `<a class="navbar-brand" href="/logout">Log Out</a>` : ''}
+      ${loggedIn ? `<a class="navbar-brand" href="/logout">Log Out</a>` : `<a
+        class="navbar-brand"
+        href="/login"
+        >Log In</a
+      >` }
     </nav>
-    <div class="container">${partial}</div>
+    <div class="container mt-5">${partial}</div>
   </body>
 </html>

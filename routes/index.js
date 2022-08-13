@@ -1,7 +1,6 @@
 const router = require('express').Router();
-const { checkAuth } = require('../middleware/auth');
 
-router.get('/', checkAuth, (req, res) => {
+router.get('/', (req, res) => {
   res.render('template', {
     locals: {
       loggedIn: req.session.user,

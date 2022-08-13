@@ -13,7 +13,8 @@ module.exports = {
   },
 
   async createUserStock(req, res) {
-    const { userId, stockId } = req.params;
+    const userId = req.session.user.id;
+    const { stockId } = req.params;
 
     const newUserStock = await UserStock.create({
       userId,

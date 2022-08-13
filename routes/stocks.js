@@ -5,9 +5,9 @@ const { checkAuth } = require('../middleware/auth');
 router
   .route('/stocks')
   .post(stockController.create)
-  .get(checkAuth, stockController.getAll);
+  .get(stockController.getAll);
 
-router.route('/stocks/:userId/:stockId').post(stockController.createUserStock);
+router.route('/stocks/:stockId').post(stockController.createUserStock);
 
 router.route('/my-stocks').get(checkAuth, stockController.getAllByUserId);
 

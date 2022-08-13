@@ -56,9 +56,9 @@ module.exports = {
   },
 
   async register(req, res) {
-    const newUser = await User.create(req.body);
+    await User.create(req.body);
 
-    res.json(newUser);
+    res.json('success');
   },
 
   async update(req, res) {
