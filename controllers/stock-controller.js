@@ -1,14 +1,15 @@
 const { Stock, User, UserStock } = require('../models');
+const getAveragePrice = require('../utils/getAveragePrice');
 const getStockPrice = require('../utils/getStockPrice');
 
 module.exports = {
   async create(req, res) {
-    const { name, category } = req.body;
+    const { name, symbol } = req.body;
 
     try {
       const newStock = await Stock.create({
         name,
-        category,
+        symbol,
       });
 
       res.json(newStock);
@@ -37,7 +38,7 @@ module.exports = {
       const userId = req.session.user.id;
 
       const allStocks = await Stock.findAll({
-        attributes: ['id', 'name', 'category'],
+        attributes: ['id', 'name', 'symbol'],
         order: [['name', 'asc']],
       });
       const userStocks = await UserStock.findAll({ where: { userId } });
@@ -55,12 +56,15 @@ module.exports = {
       for (const stock of stocks) {
         const isFavorite = favorites.includes(stock.id);
         stock.favorite = isFavorite;
-        stock.price = await getStockPrice(stock.name);
+        stock.price = await getStockPrice(stock.symbol);
       }
+
+      const average = getAveragePrice(stocks);
 
       res.render('template', {
         locals: {
           loggedIn: req.session.user,
+          average,
           stocks,
         },
         partials: {
@@ -81,7 +85,7 @@ module.exports = {
         include: {
           model: Stock,
           as: 'stocks',
-          attributes: ['id', 'name', 'category'],
+          attributes: ['id', 'name', 'symbol'],
           through: {
             attributes: [],
           },
@@ -91,12 +95,15 @@ module.exports = {
       const stocks = user.stocks.map((stock) => stock.get({ plain: true }));
 
       for (const stock of stocks) {
-        stock.price = await getStockPrice(stock.name);
+        stock.price = await getStockPrice(stock.symbol);
       }
+
+      const average = getAveragePrice(stocks);
 
       res.render('template', {
         locals: {
           loggedIn: req.session.user,
+          average,
           stocks,
         },
         partials: {

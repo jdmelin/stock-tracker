@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Stock.init(
     {
       name: DataTypes.STRING,
-      category: DataTypes.STRING,
+      symbol: DataTypes.STRING,
     },
     {
       sequelize,
