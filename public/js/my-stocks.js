@@ -1,6 +1,6 @@
 const buttons = document.querySelectorAll('button');
 
-const handleDeleteStock = async (id, button) => {
+const handleDeleteStock = async (id) => {
   try {
     const response = await fetch(`/stocks/${id}`, {
       method: 'DELETE',
@@ -8,7 +8,7 @@ const handleDeleteStock = async (id, button) => {
     const { message } = await response.json();
 
     if (message === 'success') {
-      button.closest('.stock').remove();
+      window.location.reload();
     }
   } catch {
     // handle error
@@ -21,6 +21,6 @@ for (const button of buttons) {
 
     const { id } = button.dataset;
 
-    handleDeleteStock(id, button);
+    handleDeleteStock(id);
   });
 }
