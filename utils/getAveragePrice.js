@@ -1,7 +1,7 @@
 module.exports = (stocks) => {
-  const sum = stocks.reduce((acc, item) => {
-    acc += item.price;
-    return acc;
+  const sum = stocks.reduce((total, stock) => {
+    total += stock.price;
+    return total;
   }, 0);
   const average = (sum / stocks.length).toFixed(2);
 
