@@ -1,6 +1,5 @@
 const http = require('http');
-const hostname = '127.0.0.1';
-const port = 3000;
+const port = process.env.PORT;
 const accountRouter = require('./routes/account');
 const indexRouter = require('./routes');
 const stockRouter = require('./routes/stocks');
@@ -47,6 +46,6 @@ app.get('*', (req, res) => {
   res.redirect('/');
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
