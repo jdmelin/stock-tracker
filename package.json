@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm i; npx sequelize-cli db:migrate:undo:all --env production; npx sequelize-cli db:seed:undo:all --env production; npx sequelize-cli db:seed:all --env production",
+    "build": "npm i; npx sequelize-cli db:migrate:undo:all --env production; npx sequelize-cli db:seed:undo:all --env production; npx sequelize-cli db:migrate --env production; npx sequelize-cli db:seed:all --env production",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
