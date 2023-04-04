@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx sequelize-cli db:migrate; npx sequelize-cli db:seed:all; node index.js",
+    "db:drop": "npx sequelize-cli db:drop",
+    "db:create": "npx sequelize-cli db:create",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:seed": "npx sequelize-cli db:seed:all",
+    "db:reset": "npm run db:drop; npm run db:create; npm run db:migrate; npm run db:seed; npm run dev",
     "dev": "nodemon index.js",
+    "start": "npx sequelize-cli db:migrate; npx sequelize-cli db:seed:all; node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

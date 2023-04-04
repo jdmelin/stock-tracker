@@ -48,8 +48,8 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          name: 'Ping Identity',
-          symbol: 'PING',
+          name: 'ForgeRock',
+          symbol: 'FORG',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

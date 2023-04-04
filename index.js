@@ -1,5 +1,4 @@
 const http = require('http');
-const port = process.env.PORT;
 const accountRouter = require('./routes/account');
 const indexRouter = require('./routes');
 const stockRouter = require('./routes/stocks');
@@ -12,7 +11,9 @@ const es6Renderer = require('express-es6-template-engine');
 const db = require('./models');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const store = new SequelizeStore({ db: db.sequelize });
+
 require('dotenv').config();
+const port = process.env.PORT;
 
 store.sync();
 
